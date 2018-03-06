@@ -1,0 +1,26 @@
+<div class="imagecrop_ui_section ">
+	<h3><?= $GLOBALS['TL_LANG']['MSC']['imagecropAspectRatio'] ?></h3>
+		
+		<div class="btn-group docs-aspect-ratios" data-toggle="buttons">
+
+			
+			<?php foreach ($this->settingARs as $arrAR) { ?>
+				<?php
+					$intValue =  $arrAR['imagecropArWidth'] / $arrAR['imagecropArHeight'];
+					// var_dump($intValue);
+					$strLabel = $arrAR['imagecropArWidth'] .' / '. $arrAR['imagecropArHeight'];
+					$strTooltip = ($arrAR['imagecropArHint'] != '' ? $arrAR['imagecropArHint'] : $strLabel);
+				 ?>
+				<label class="btn btn-primary btn-sm">
+					<input type="radio" class="sr-only" name="aspectRatio" value="<?= $intValue ?>"  >
+					<span class="docs-tooltip" data-toggle="tooltip" title="<?= $strTooltip ?>">
+						<?= $strLabel ?>
+					</span>
+				</label>
+			<?php } ?>
+
+
+		</div>
+	
+</div>
+

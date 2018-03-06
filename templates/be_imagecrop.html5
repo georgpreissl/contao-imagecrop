@@ -1,0 +1,346 @@
+
+<div id="tl_buttons">
+	<a href="<?= $this->back ?>" class="header_back" title="<?= specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>"><?= $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a>
+</div>
+
+<div class="imagecrop_wrap">
+
+	<h2 class="sub_headline"><?= $GLOBALS['TL_LANG']['MSC']['imagecropHeadline'] ?></h2>
+	<?= $this->messages ?>
+
+	<form id="cropForm" action="<?= $this->formAction ?>" id="tl_unzip" class="tl_form" method="get" onsubmit="submitCrop()">
+		<div class="tl_formbody_edit" id="tl_image_cropper">
+			<input type="hidden" name="do" value="<?= $this->inputDo ?>" />
+			<input type="hidden" name="key" value="<?= $this->inputKey ?>" />
+			<input type="hidden" name="id" value="<?= $this->inputId ?>" />
+			<input type="hidden" name="token" value="<?= $this->token ?>" />
+			<input type="hidden" name="new_locx" id="new_locx" value="" />
+			<input type="hidden" name="new_locy" id="new_locy" value="" />
+			<input type="hidden" name="new_locw" id="new_locw" value="" />
+			<input type="hidden" name="new_loch" id="new_loch" value="" />
+
+			<div class="tl_tbox block">
+				<?= $GLOBALS['TL_LANG']['MSC']['imagecropIntroduction'] ?>
+			</div>
+
+			<div class="row">
+				<div class="col-md-9">
+					<div class="img-container">
+						<img src="<?= $this->imageSrc ?>" alt="Picture">
+					</div>
+					<?php include('ui_tools.html'); ?>
+				</div>
+				<div class="col-md-3">
+					<?php include('ui_data.html'); ?>
+					<?php include('ui_preview.html'); ?>
+					<div class="docs-toggles">
+						<?php count($this->settingARs) ? include('ui_aspect-ratios.html') : ''; ?>
+						<?php count($this->settingSizes) ? include('ui_sizes.html') : ''; ?>
+					</div>
+					<p class="imagegrop_credits"><?= $GLOBALS['TL_LANG']['MSC']['imagecropCredits'] ?></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="tl_formbody_submit">
+			<div class="tl_submit_container">
+				<input type="submit" id="UpdateImage" name="UpdateImage" class="tl_submit" alt="<?= specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']).'" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']) ?>" /> 
+				<input type="submit" id="submit" name="submit" class="tl_submit" alt="<?= specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']).'" accesskey="a" value="'.specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']) ?>" /> 
+			</div>
+		</div>
+
+	</form>
+</div>
+
+<script>
+
+window.onload = function () {
+
+	'use strict';
+
+	var Cropper = window.Cropper;
+	var URL = window.URL || window.webkitURL;
+	var container = document.querySelector('.img-container');
+	var image = container.getElementsByTagName('img').item(0);
+	var download = document.getElementById('download');
+	var actions = document.getElementById('actions');
+	var dataX = document.getElementById('dataX');
+	var dataY = document.getElementById('dataY');
+	var dataHeight = document.getElementById('dataHeight');
+	var dataWidth = document.getElementById('dataWidth');
+	var dataRotate = document.getElementById('dataRotate');
+	var dataScaleX = document.getElementById('dataScaleX');
+	var dataScaleY = document.getElementById('dataScaleY');
+
+	var options = {
+		viewMode: 0,
+		dragMode: 'crop',
+		preview: '.img-preview',
+		modal: true,
+		ready: function (e) {
+			// console.log(e.type);
+		},
+		cropstart: function (e) {
+			// console.log(e.type, e.detail.action);
+		},
+		cropmove: function (e) {
+			// console.log(e.type, e.detail.action);
+		},
+		cropend: function (e) {
+			// console.log(e.type, e.detail.action);
+		},
+		crop: function (e) {
+			var data = e.detail;
+
+			// console.log(e.type);
+			dataX.value = Math.round(data.x);
+			dataY.value = Math.round(data.y);
+			dataHeight.value = Math.round(data.height);
+			dataWidth.value = Math.round(data.width);
+			// dataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
+			// dataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
+			// dataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
+		},
+		zoom: function (e) {
+			// console.log(e.type, e.detail.ratio);
+		}
+	};
+
+	var cropper = new Cropper(image, options);
+	var originalImageURL = image.src;
+	var uploadedImageURL;
+
+
+	// deactivate buttons if not supported
+	if (!document.createElement('canvas').getContext) {
+		$('button[data-method="getCroppedCanvas"]').prop('disabled', true);
+	}
+
+	if (typeof document.createElement('cropper').style.transition === 'undefined') {
+		$('button[data-method="rotate"]').prop('disabled', true);
+		$('button[data-method="scale"]').prop('disabled', true);
+	}
+
+	// aspecratio- and sizes-buttons
+	 document.querySelector('.docs-toggles').onchange = function (event) {
+		var e = event || window.event;
+		var target = e.target || e.srcElement;
+		var cropBoxData;
+		var canvasData;
+		var isCheckbox;
+		var isRadio;
+		
+		//console.log(target);
+		if (!cropper) {
+		  return;
+		}
+
+		if (target.tagName.toLowerCase() === 'label') {
+		  target = target.querySelector('input');
+		}
+
+		isCheckbox = target.type === 'checkbox';
+		isRadio = target.type === 'radio';
+
+		if (isCheckbox || isRadio) {
+			if (isCheckbox) {
+				// checkbox has been clicked
+				options[target.name] = target.checked;
+				cropBoxData = cropper.getCropBoxData();
+				canvasData = cropper.getCanvasData();
+
+				options.ready = function () {
+				  // console.log('checkbox');
+				  cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+				};
+			} else {
+				// radio input has been clicked
+				if (target.name=='aspectRatio') {
+					// change aspect ratio
+					options[target.name] = target.value;
+
+				} else{
+					// change to pre-defined pixel size
+					// console.log(target.value);
+					// console.log(target.name);
+					cropBoxData = cropper.getCropBoxData();
+					cropBoxData.width = parseInt(target.dataset.width);
+					cropBoxData.height = parseInt(target.dataset.height);
+					// console.log(cropBoxData);
+					options.ready = function() {
+				  		// console.log('options ready');
+				  		cropper.setCropBoxData(cropBoxData);
+					};
+					
+				};
+			}
+
+		  // Restart
+		  cropper.destroy();
+		  cropper = new Cropper(image, options);
+		}
+	  };
+
+
+		var inputElem = document.getElementsByClassName('form-control');
+		for(var i = 0; i < inputElem.length; i++) {
+			 inputElem[i].addEventListener("focusout",   function(){
+					// console.log('onfocusout');
+					var currentData = cropper.getData();
+					currentData[this.placeholder] = parseInt(this.value);
+					cropper.setData(currentData);
+			});
+		}
+
+
+
+
+
+	// Toolbar buttons
+	 document.querySelector('.docs-buttons').onclick = function (event) {
+	 	//console.log('docs-buttons');
+		var e = event || window.event;
+		var target = e.target || e.srcElement;
+		var result;
+		var input;
+		var data;
+		// console.log(target);
+
+		if (!cropper) {
+		  return;
+		}
+
+		while (target !== this) {
+		  if (target.getAttribute('data-method')) {
+			break;
+		  }
+
+		  target = target.parentNode;
+		}
+
+		if (target === this || target.disabled || target.className.indexOf('disabled') > -1) {
+		  return;
+		}
+
+		data = {
+			method: target.getAttribute('data-method'),
+			target: target.getAttribute('data-target'),
+			option: target.getAttribute('data-option'),
+			secondOption: target.getAttribute('data-second-option')
+		};
+
+		if (data.method) {
+			if (typeof data.target !== 'undefined') {
+				input = document.querySelector(data.target);
+
+				if (!target.hasAttribute('data-option') && data.target && input) {
+				  try {
+					data.option = JSON.parse(input.value);
+				  } catch (e) {
+					console.log(e.message);
+				  }
+				}
+			}
+
+			if (data.method === 'getCroppedCanvas') {
+				data.option = JSON.parse(data.option);
+			}
+
+			result = cropper[data.method](data.option, data.secondOption);
+
+			switch (data.method) {
+				case 'scaleX':
+				case 'scaleY':
+				  target.setAttribute('data-option', -data.option);
+				  break;
+
+				case 'getCroppedCanvas':
+				  if (result) {
+
+					// Bootstrap's Modal
+					$('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
+
+					if (!download.disabled) {
+					  download.href = result.toDataURL('image/jpeg');
+					}
+				  }
+
+				  break;
+
+				case 'destroy':
+					cropper = null;
+
+					if (uploadedImageURL) {
+						URL.revokeObjectURL(uploadedImageURL);
+						uploadedImageURL = '';
+						image.src = originalImageURL;
+					}
+
+					break;
+
+
+			}
+
+			if (typeof result === 'object' && result !== cropper && input) {
+				try {
+				  input.value = JSON.stringify(result);
+				} catch (e) {
+				  console.log(e.message);
+				}
+			}
+		}
+	};
+
+
+	// move the image with the cursor keys
+
+	document.body.onkeydown = function (event) {
+		var e = event || window.event;
+
+		if (!cropper || this.scrollTop > 300) {
+			return;
+		}
+
+		switch (e.keyCode) {
+		  case 37:
+			e.preventDefault();
+			cropper.move(-1, 0);
+			break;
+
+		  case 38:
+			e.preventDefault();
+			cropper.move(0, -1);
+			break;
+
+		  case 39:
+			e.preventDefault();
+			cropper.move(1, 0);
+			break;
+
+		  case 40:
+			e.preventDefault();
+			cropper.move(0, 1);
+			break;
+		}
+	};
+
+
+
+	document.getElementById("cropForm").onsubmit = function() {
+		var objCropData = cropper.getData(true);
+		//console.log(objCropData);
+		document.getElementById('new_locx').value = objCropData.x;	
+		document.getElementById('new_locy').value = objCropData.y;	
+		document.getElementById('new_locw').value = objCropData.width;	
+		document.getElementById('new_loch').value = objCropData.height;	
+
+		return true; 
+	};
+
+
+
+
+};
+
+
+</script>

@@ -1,0 +1,19 @@
+<div class="imagecrop_ui_section">
+	<h3><?= $GLOBALS['TL_LANG']['MSC']['imagecropSizes'] ?></h3>
+			
+		<?php foreach ($this->settingSizes as $arrSize) { ?>
+			<?php 
+				$strLabel = $arrSize['imagecropWidth'] .'x'. $arrSize['imagecropHeight'];
+				$strTooltip = ($arrSize['imagecropHint'] != '' ? $arrSize['imagecropHint'] : $strLabel);
+			 ?>
+	<div class="btn-group docs-aspect-ratios" data-toggle="buttons">
+			<label class="btn btn-primary btn-sm">
+				<input type="radio" class="sr-only" id="aspectRatio1" name="width" value="100" data-width="<?= $arrSize['imagecropWidth'] ?>" data-height="<?= $arrSize['imagecropHeight'] ?>" >
+				<span class="docs-tooltip" data-toggle="tooltip" title="<?= $strTooltip ?>">
+					<?= $strLabel ?>
+				</span>
+			</label>
+	</div>
+		<?php } ?>
+	
+</div>
