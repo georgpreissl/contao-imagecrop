@@ -24,5 +24,4 @@ $GLOBALS['BE_MOD']['system']['files']['imagecrop'] = array('ImageCrop', 'croppin
 
 
 
-
 ?>

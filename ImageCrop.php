@@ -31,6 +31,7 @@ class ImageCrop extends Backend
 
 		if (strlen($this->Input->get('token')) && $this->Input->get('token') == $this->Session->get('tl_imagecrop'))
 		{			
+
 			$strW = $this->Input->get('new_locw');
 			$strH = $this->Input->get('new_loch');
 			$strX = $this->Input->get('new_locx');
@@ -38,12 +39,33 @@ class ImageCrop extends Backend
 
 			$strPath = TL_ROOT.'/'.$this->Input->get('id');
 
+			// Function to check file type: JPEG, GIF and PNG support
+			function minimime($fname) {
+			    $fh=fopen($fname,'rb');
+			    if ($fh) {
+			        $bytes6=fread($fh,6);
+			        fclose($fh);
+			        if ($bytes6===false) return false;
+			        if (substr($bytes6,0,3)=="\xff\xd8\xff") return 'image/jpeg';
+			        if ($bytes6=="\x89PNG\x0d\x0a") return 'image/png';
+			        if ($bytes6=="GIF87a" || $bytes6=="GIF89a") return 'image/gif';
+			        return 'application/octet-stream';
+			    }
+			    return false;
+			}
+			$ext = minimime($strPath);
 
 			// Create two variables of the type resource
 			// resource -> a special type of variable, holding a reference to an external resource
 
 			// Create a new image resource identifier (the source image)
-			$resImgSrc = imagecreatefromjpeg($strPath);
+			if($ext == 'image/png'){
+				$resImgSrc = imagecreatefrompng($strPath);
+			} else if($ext == 'image/gif'){
+				$resImgSrc = imagecreatefromgif($strPath);
+			} else if($ext == 'image/jpeg'){
+				$resImgSrc = imagecreatefromjpeg($strPath);
+			}
  			
  			// Create a true color image resource identifier (the destination image)
 			$resImgDest = imagecreatetruecolor($strW, $strH);
@@ -66,31 +88,53 @@ class ImageCrop extends Backend
 				$thumbnail = $this->getImage($this->Input->get('id'),$_width, $_height);
 				
 				$strCacheName = 'system/html/' . $objFile->filename . '-' . substr(md5('-w' . $objFile->width . '-h' . $objFile->height . '-' .urldecode($this->Input->get('id'))), 0, 8) . '.' . $objFile->extension;
-				imagejpeg($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
+				header ('Content-Type: ' . $ext);
+				if($ext == 'image/png'){
+					imagepng($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
+				} else if($ext == 'image/gif'){
+					imagegif($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
+				} else if($ext == 'image/jpeg'){
+					imagejpeg($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
+				}
 				imagedestroy($resImgDest);
 				$thumbnail = new File($thumbnail);
 				$thumbnail->delete();
 
 			} else {
+			
 				// create a copy of the image
 				$strNewPath = $objFile->dirname.'/'.$objFile->filename.'_croppedCopy_'.time().'.'.$objFile->extension;
 				
 				// create a JPEG file from the image resource 
-				imagejpeg($resImgDest, $strNewPath);
+				header ('Content-Type: ' . $ext);
+				if($ext == 'image/png'){
+					imagepng($resImgDest, $strNewPath);
+				} else if($ext == 'image/gif'){
+					imagegif($resImgDest, $strNewPath);
+				} else if($ext == 'image/jpeg'){
+					imagejpeg($resImgDest, $strNewPath);
+				}
 
 				// frees any memory associated with the image resource
 				imagedestroy($resImgDest);
+				
 			}
 
 			if (!$error) 
 			{
 				$this->log('Image file "'.$this->Input->get('id').'" has been cropped', 'tl_image_cropper imageCrop()', TL_FILES);
 			}
-			$this->redirect($this->Environment->script.'?do=files');
+
+			if (version_compare(VERSION, '3.5', '>')) {
+				// funktioniert unter 4.4
+				$this->redirect('contao?do=files');
+			} else {
+				// funktioniert unter 3.5
+				$this->redirect($this->Environment->script.'?do=files');
+			}
 			
 		}
 
-		
 		// Setup the form
 
 		// create the token (e.g. '8d7cfa67389c2df17e192965f7121793')
@@ -101,7 +145,6 @@ class ImageCrop extends Backend
 		// get the predefined ratios and sizes
 		$arrSettingSizes = $GLOBALS['TL_CONFIG']['useImagecropSizes'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true) : array();
 		$arrSettingARs = $GLOBALS['TL_CONFIG']['useImagecropARs'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true) : array();
-
 
 		if (TL_MODE == 'BE')
 		{
@@ -120,7 +163,17 @@ class ImageCrop extends Backend
 			$this->Template->messages = $this->getMessages();
 			$this->Template->settingARs = $arrSettingARs;
 			$this->Template->settingSizes = $arrSettingSizes;
-			$this->Template->formAction = ampersand($this->Environment->script, ENCODE_AMPERSANDS);
+
+
+
+			if (version_compare(VERSION, '3.5', '>')) {
+				// funktioniert unter 4.4
+				$this->Template->formAction = "contao?";
+			} else {
+				// funktioniert unter 3.5
+				$this->Template->formAction = ampersand($this->Environment->script, ENCODE_AMPERSANDS);
+			}
+
 
 			$strHtml .= $this->Template->parse();
 		}

@@ -38,12 +38,6 @@ $GLOBALS['TL_LANG']['MSC']['imagecropSizes'] = 'Pixel sizes';
 $GLOBALS['TL_LANG']['MSC']['imagecropTools'] = 'Tools';
 
 /**
- * Filename
- */
-$GLOBALS['TL_LANG']['MSC']['imagecropCopy'] = 'copy';
-
-
-/**
  * Section data
  */
 $GLOBALS['TL_LANG']['MSC']['imagecropWidth'] = 'Width';

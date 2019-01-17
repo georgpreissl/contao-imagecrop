@@ -76,7 +76,7 @@ class tl_imagecrop extends tl_files
 
 		$objFile = new File($strDecoded);
 
-		if (!in_array($objFile->extension, array('svg','jpg','jpeg')))
+		if (!in_array($objFile->extension, array('jpg','jpeg','png','gif')))
 		{
 			return '';
 		}
