@@ -20,7 +20,7 @@
  * 
  */
 
-$GLOBALS['BE_MOD']['system']['files']['imagecrop'] = array('ImageCrop', 'croppingImage');
+$GLOBALS['BE_MOD']['system']['files']['imagecrop'] = array('GeorgPreissl\\IC\\ImageCrop', 'croppingImage');
 
 
 

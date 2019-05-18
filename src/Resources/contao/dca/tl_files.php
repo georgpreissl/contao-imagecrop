@@ -22,6 +22,11 @@
  */
 
 
+/**
+ * Namespace
+ */
+namespace GeorgPreissl\IC;
+
 
 
 array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
@@ -44,7 +49,7 @@ array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
  *
  */
 
-class tl_imagecrop extends tl_files
+class tl_imagecrop extends \tl_files
 {
 
 
