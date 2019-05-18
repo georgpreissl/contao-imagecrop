@@ -1,0 +1,25 @@
+{
+    "name": "georgpreissl/imagecrop",
+    "description": "Image crop bundle for Contao Open Source CMS",
+    "keywords": ["cropping", "images", "crop", "georgpreissl", "bundle", "module", "contao"],
+    "type": "contao-module",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Georg Preissl",
+            "homepage": "https://www.georg-preissl.at",
+            "role":"Developer"
+        }
+    ],
+    "support":{
+        "website":"https://www.georg-preissl.at",
+        "issues":"https://github.com/georgpreissl/imagecrop/issues",
+        "source":"https://github.com/georgpreissl/imagecrop"
+    },
+    "require": {
+        "php": ">=5.5",
+        "phpoffice/phpspreadsheet": "~1.2",
+        "contao/core-bundle": "~3.2 || ~4.1",
+        "contao-community-alliance/composer-plugin": "~2.4 || ~3.0"
+    }
+}
