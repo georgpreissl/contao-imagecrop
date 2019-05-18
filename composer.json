@@ -18,8 +18,12 @@
     },
     "require": {
         "php": ">=5.5",
-        "phpoffice/phpspreadsheet": "~1.2",
-        "contao/core-bundle": "~3.2 || ~4.1",
-        "contao-community-alliance/composer-plugin": "~2.4 || ~3.0"
-    }
+        "contao/core-bundle": "~3.2 || ~4.1"
+    },
+	"require-dev": {
+		"contao/manager-plugin": "^2.0"
+	},
+	"conflict": {
+		"contao/manager-plugin": "<2.0 || >=3.0"
+	}	
 }
