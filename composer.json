@@ -30,16 +30,16 @@
 	"autoload": {
 		"psr-4": {
 			"GeorgPreissl\\IC\\": "src/"
-		},
-		"classmap": [
-			"src/Resources/contao/"
-		],
+		},	
+        "classmap": [
+            "src/Resources/contao/"
+        ],
         "exclude-from-classmap": [
             "src/Resources/contao/config/",
             "src/Resources/contao/dca/",
             "src/Resources/contao/languages/",
             "src/Resources/contao/templates/"
-        ]			
+        ]
 	},
 	"extra": {
 		"contao-manager-plugin": "GeorgPreissl\\IC\\ContaoManager\\Plugin"

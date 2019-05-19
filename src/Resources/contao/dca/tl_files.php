@@ -1,31 +1,11 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
-
-/**
- * TYPOlight webCMS
- *
- * The TYPOlight webCMS is an accessible web content management system that 
- * specializes in accessibility and generates W3C-compliant HTML code. It 
- * provides a wide range of functionality to develop professional websites 
- * including a built-in search engine, form generator, file and user manager, 
- * CSS engine, multi-language support and many more. For more information and 
- * additional TYPOlight applications like the TYPOlight MVC Framework please 
- * visit the project website http://www.typolight.org.
- *
- * 
- *
- * @author     Georg Preissl <http://www.georg-preissl.at> 
- * @package    imagecrop
- * @author	   Cropper.js by Fengyuan Chen <http://chenfengyuan.com>       
- * @author	   based on the extension Moo_imagecropper by Lightive (erwan.ripoll)       
- * @license    GPL 
- * 
- */
+<?php
 
 
-/**
- * Namespace
- */
-namespace GeorgPreissl\IC;
+
+// namespace GeorgPreissl\IC;
+
+use Contao\File;
+
 
 
 
@@ -35,11 +15,13 @@ array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_files']['imagecrop'],
 				'href'                => 'key=imagecrop',
-				'icon'                => 'system/modules/imagecrop/html/crop.svg',
+				'icon'                => 'bundles/georgpreisslimagecrop/icons/crop.svg',
 				'button_callback'     => array('tl_imagecrop', 'getCropperIcon')
 			)
 	)
 );
+
+
 
 
 /**
@@ -49,7 +31,7 @@ array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
  *
  */
 
-class tl_imagecrop extends \tl_files
+class tl_imagecrop extends tl_files
 {
 
 
@@ -65,6 +47,8 @@ class tl_imagecrop extends \tl_files
 	 */
 	public function getCropperIcon($row, $href, $label, $title, $icon, $attributes)
 	{
+		// var_dump('xxx');
+		// printf('<pre>%s</pre>', print_r($icon,true));
 		$this->import('BackendUser', 'User');
 
 		if (!$this->User->isAdmin && !in_array('f5', $this->User->fop))
@@ -91,6 +75,8 @@ class tl_imagecrop extends \tl_files
 	
 	
 }
+
+
 
 
 ?>

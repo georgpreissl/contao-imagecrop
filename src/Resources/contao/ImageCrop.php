@@ -1,10 +1,14 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 namespace GeorgPreissl\IC;
 
+use Contao\DataContainer;
+use Contao\Backend;
+use Contao\BackendUser;
+use Contao\BackendTemplate;
+use Contao\File;
 
-
-class ImageCrop extends \Backend
+class ImageCrop extends Backend
 {
 
 	public function croppingImage(DataContainer $dc)
@@ -131,11 +135,14 @@ class ImageCrop extends \Backend
 
 		if (TL_MODE == 'BE')
 		{
-			var_dump("jo");
-			$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/imagecrop/html/scripts/cropper.min.js'; 
+			// var_dump("jo");
+			$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/georgpreisslimagecrop/js/cropper.min.js'; 
+
+
+
 			$GLOBALS['TL_CSS'][] = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'; 
-			$GLOBALS['TL_CSS'][] = 'system/modules/imagecrop/html/css/bootstrap.css'; 
-			$GLOBALS['TL_CSS'][] = 'system/modules/imagecrop/html/css/cropper.css'; 
+			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/bootstrap.css|static'; 
+			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper.css|static'; 
 
 			$this->Template = new BackendTemplate('be_imagecrop');
 			$this->Template->back = $this->Environment->base . preg_replace('/&(amp;)?(id|key|submit|imagecrop|token)=[^&]*/', '', $this->Environment->request);
