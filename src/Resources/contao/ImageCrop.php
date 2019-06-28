@@ -135,14 +135,11 @@ class ImageCrop extends Backend
 
 		if (TL_MODE == 'BE')
 		{
-			// var_dump("jo");
 			$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/georgpreisslimagecrop/js/cropper.min.js'; 
-
-
-
 			$GLOBALS['TL_CSS'][] = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'; 
 			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/bootstrap.css|static'; 
-			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper.css|static'; 
+			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper.min.css|static'; 
+			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper-custom.css|static'; 
 
 			$this->Template = new BackendTemplate('be_imagecrop');
 			$this->Template->back = $this->Environment->base . preg_replace('/&(amp;)?(id|key|submit|imagecrop|token)=[^&]*/', '', $this->Environment->request);

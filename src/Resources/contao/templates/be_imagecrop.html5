@@ -4,7 +4,6 @@
 </div>
 
 <div class="imagecrop_wrap">
-
 	<h2 class="sub_headline"><?= $GLOBALS['TL_LANG']['MSC']['imagecropHeadline'] ?></h2>
 	<?= $this->messages ?>
 

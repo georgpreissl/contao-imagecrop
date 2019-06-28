@@ -1,7 +1,7 @@
 {
     "name": "georgpreissl/imagecrop",
 	"homepage":"https://github.com/georgpreissl/imagecrop",
-    "description": "Image crop bundle for Contao Open Source CMS",
+    "description": "Contao bundle to crop images in the backend.",
     "keywords": ["cropping", "images", "crop", "georgpreissl", "bundle", "module", "contao"],
     "type": "contao-module",
     "license": "LGPL-3.0+",
