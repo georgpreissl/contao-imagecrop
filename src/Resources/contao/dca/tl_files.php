@@ -2,8 +2,6 @@
 
 
 
-// namespace GeorgPreissl\IC;
-
 use Contao\File;
 
 
@@ -22,8 +20,6 @@ array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
 );
 
 
-
-
 /**
  * Class tl_imagecrop
  *
@@ -33,7 +29,6 @@ array_insert($GLOBALS['TL_DCA']['tl_files']['list']['operations'], 1, array
 
 class tl_imagecrop extends tl_files
 {
-
 
 	/**
 	 * Return the image_cropper button
@@ -47,8 +42,6 @@ class tl_imagecrop extends tl_files
 	 */
 	public function getCropperIcon($row, $href, $label, $title, $icon, $attributes)
 	{
-		// var_dump('xxx');
-		// printf('<pre>%s</pre>', print_r($icon,true));
 		$this->import('BackendUser', 'User');
 
 		if (!$this->User->isAdmin && !in_array('f5', $this->User->fop))

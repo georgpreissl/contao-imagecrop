@@ -1,2 +1,2 @@
 # imagecrop
-Fügt eine Schaltfläche im Contao-Dateimanager hinzu, um das Zuschneiden von Bildern zu ermöglichen.
+Adds a button in the Contao file manager to allow the cropping of images.

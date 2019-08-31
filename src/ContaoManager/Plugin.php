@@ -17,7 +17,7 @@ use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 /**
  * Plugin for the Contao Manager.
  *
- * @author Darko Selesi (w3scout)
+ * @author Georg Preissl  <https://github.com/georgpreissl>
  */
 class Plugin implements BundlePluginInterface
 {
