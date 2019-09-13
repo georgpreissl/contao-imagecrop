@@ -104,6 +104,26 @@ class ImageCrop extends Backend
 
 				// frees any memory associated with the image resource
 				imagedestroy($resImgDest);
+
+				// Create the file
+				if (is_file(TL_ROOT . '/' . $strNewPath))
+				{
+					$objFile = new \File($strNewPath);
+
+					$objModel = new \FilesModel();
+					$objModel->pid       = $strPid;
+					$objModel->tstamp    = time();
+					$objModel->name      = $objFile->name;
+					$objModel->type      = 'file';
+					$objModel->path      = $objFile->path;
+					$objModel->extension = $objFile->extension;
+					$objModel->found     = 2;
+					$objModel->hash      = $objFile->hash;
+					$objModel->uuid      = $objDatabase->getUuid();
+					$objModel->save();
+				}
+
+
 				
 			}
 
