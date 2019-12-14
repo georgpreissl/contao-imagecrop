@@ -7,6 +7,8 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\BackendTemplate;
 use Contao\File;
+use Contao\FilesModel;
+use Contao\Image;
 
 class ImageCrop extends Backend
 {
@@ -18,17 +20,28 @@ class ImageCrop extends Backend
 
 		if (strlen($this->Input->get('token')) && $this->Input->get('token') == $this->Session->get('tl_imagecrop'))
 		{			
+			// get the new dimensions
+			$strW = $this->Input->get('data_width');
+			$strH = $this->Input->get('data_height');
+			$strX = $this->Input->get('data_x');
+			$strY = $this->Input->get('data_y');
 
-			$strW = $this->Input->get('new_locw');
-			$strH = $this->Input->get('new_loch');
-			$strX = $this->Input->get('new_locx');
-			$strY = $this->Input->get('new_locy');
+			// get the submitted scale values for flipping ("1" or "-1")
+			$strScaleX = $this->Input->get('scale_x');
+			$strScaleY = $this->Input->get('scale_y');
 
-			$strPath = TL_ROOT.'/'.$this->Input->get('id');
+			// get the submitted rotation value
+			$strRotation = $this->Input->get('rotation');
 
-			// Function to check file type: JPEG, GIF and PNG support
-			function minimime($fname) {
-			    $fh=fopen($fname,'rb');
+			// get the path of the source file
+			$strPath = $this->Input->get('id');
+			// e.g. "files/theme/image-3.jpg"
+
+
+
+			// check the file type of the given file
+			function checkFileExtension($fname) {
+			    $fh = fopen($fname,'rb');
 			    if ($fh) {
 			        $bytes6=fread($fh,6);
 			        fclose($fh);
@@ -40,85 +53,118 @@ class ImageCrop extends Backend
 			    }
 			    return false;
 			}
-			$ext = minimime($strPath);
 
-			// Create two variables of the type resource
-			// resource -> a special type of variable, holding a reference to an external resource
+			$strExt = checkFileExtension($strPath);
+			// e.g. "image/jpeg"
 
-			// Create a new image resource identifier (the source image)
-			if($ext == 'image/png'){
-				$resImgSrc = imagecreatefrompng($strPath);
-			} else if($ext == 'image/gif'){
-				$resImgSrc = imagecreatefromgif($strPath);
-			} else if($ext == 'image/jpeg'){
-				$resImgSrc = imagecreatefromjpeg($strPath);
+
+			// create the source image (image resource identifier)
+			if($strExt == 'image/png'){
+				$resImgSrc = imagecreatefrompng(TL_ROOT.'/'.$strPath);
+			} else if($strExt == 'image/gif'){
+				$resImgSrc = imagecreatefromgif(TL_ROOT.'/'.$strPath);
+			} else if($strExt == 'image/jpeg'){
+				$resImgSrc = imagecreatefromjpeg(TL_ROOT.'/'.$strPath);
 			}
  			
- 			// Create a true color image resource identifier (the destination image)
-			$resImgDest = imagecreatetruecolor($strW, $strH);
  
+			// if cropping is not desired, leave the original dimensions
+			if ($strW == "0" || $strH == "0") {
+				$strW  = imagesx($resImgSrc);
+				$strH = imagesy($resImgSrc);
 
- 			// Copy part of the source image
-			imagecopy($resImgDest, $resImgSrc, 0, 0, $strX, $strY, $strW, $strH);
+			}
+
+			// flip the image vertical
+			if ($strScaleY == "-1") {
+				imageflip($resImgSrc, IMG_FLIP_VERTICAL);
+			}
+
+			// flip the image horizontal
+			if ($strScaleX == "-1") {
+				imageflip($resImgSrc, IMG_FLIP_HORIZONTAL);
+			}
+
+			// rotate the image
+			if ($strRotation !== "0") {
+				$intRotation = intval($strRotation);
+				$intRotation = 360 - $intRotation;
+				$resImgSrc = imagerotate($resImgSrc, $intRotation, 0);
+				// if ($intRotation == 90 || $intRotation == 270) {
+				// 	$strW  = imagesx($resImgSrc);
+				// 	$strH = imagesy($resImgSrc);
+				// }
+
+			}
 
 
-			$objFile = new File($this->Input->get('id'));
+
+ 			// create the new image (image resource identifier)
+ 			// returns an image identifier representing a black image of the specified size
+			$resImgNew = imagecreatetruecolor($strW, $strH);
+
+ 			// copy part of the source image into the new image
+			imagecopy($resImgNew, $resImgSrc, 0, 0, $strX, $strY, $strW, $strH);
+
+
+
 			
 			$error = false;
-			if ($this->Input->get('UpdateImage') == $GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage'])
-			{
-				// overwrite the image
 
-				// Get the cached thumbnail to destroy it
-				$_height = ($objFile->height < 70) ? $objFile->height : 70;
-				$_width = (($objFile->width * $_height / $objFile->height) > 400) ? 90 : '';
-				$thumbnail = $this->getImage($this->Input->get('id'),$_width, $_height);
+			if ($this->Input->get('UpdateImage'))
+			{
+				// update the image
 				
-				$strCacheName = 'system/html/' . $objFile->filename . '-' . substr(md5('-w' . $objFile->width . '-h' . $objFile->height . '-' .urldecode($this->Input->get('id'))), 0, 8) . '.' . $objFile->extension;
-				header ('Content-Type: ' . $ext);
-				if($ext == 'image/png'){
-					imagepng($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
-				} else if($ext == 'image/gif'){
-					imagegif($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
-				} else if($ext == 'image/jpeg'){
-					imagejpeg($resImgDest, TL_ROOT.'/'.$this->Input->get('id'));
+				// create a file from the image resource 
+				header ('Content-Type: ' . $strExt);
+				if($strExt == 'image/png'){
+					imagepng($resImgNew, TL_ROOT.'/'.$strPath);
+				} else if($strExt == 'image/gif'){
+					imagegif($resImgNew, TL_ROOT.'/'.$strPath);
+				} else if($strExt == 'image/jpeg'){
+					imagejpeg($resImgNew, TL_ROOT.'/'.$strPath);
 				}
-				imagedestroy($resImgDest);
-				$thumbnail = new File($thumbnail);
-				$thumbnail->delete();
+
+				// frees any memory associated with the image
+				imagedestroy($resImgNew);
+
 
 			} else {
-			
 				// create a copy of the image
-				$strNewPath = $objFile->dirname.'/'.$objFile->filename.'_croppedCopy_'.time().'.'.$objFile->extension;
+
+				// create a contao file object of the source image
+				$objFile = new File($strPath);
+
+				// put the new path together
+				$strNewPath = $objFile->dirname.'/'.$objFile->filename.'_copy_'.time().'.'.$objFile->extension;
 				
-				// create a JPEG file from the image resource 
-				header ('Content-Type: ' . $ext);
-				if($ext == 'image/png'){
-					imagepng($resImgDest, $strNewPath);
-				} else if($ext == 'image/gif'){
-					imagegif($resImgDest, $strNewPath);
-				} else if($ext == 'image/jpeg'){
-					imagejpeg($resImgDest, $strNewPath);
+				// create a file from the image resource 
+				header ('Content-Type: ' . $strExt);
+				if($strExt == 'image/png'){
+					imagepng($resImgNew, $strNewPath);
+				} else if($strExt == 'image/gif'){
+					imagegif($resImgNew, $strNewPath);
+				} else if($strExt == 'image/jpeg'){
+					imagejpeg($resImgNew, $strNewPath);
 				}
 
 				// frees any memory associated with the image resource
-				imagedestroy($resImgDest);
+				imagedestroy($resImgNew);
 
-				// Create the file
+				// create a contao file object of the new image
 				if (is_file(TL_ROOT . '/' . $strNewPath))
 				{
-					$objFile = new \File($strNewPath);
+					$objFileNew = new File($strNewPath);
 
-					$objModel = new \FilesModel();
+					$objModel = new FilesModel();
 					$objModel->pid       = $strPid;
 					$objModel->tstamp    = time();
-					$objModel->name      = $objFile->name;
+					$objModel->name      = $objFileNew->name;
 					$objModel->type      = 'file';
-					$objModel->path      = $objFile->path;
-					$objModel->extension = $objFile->extension;
+					$objModel->path      = $objFileNew->path;
+					$objModel->extension = $objFileNew->extension;
 					$objModel->found     = 2;
-					$objModel->hash      = $objFile->hash;
+					$objModel->hash      = $objFileNew->hash;
 					$objModel->uuid      = $objDatabase->getUuid();
 					$objModel->save();
 				}
@@ -132,15 +178,22 @@ class ImageCrop extends Backend
 				$this->log('Image file "'.$this->Input->get('id').'" has been cropped', 'tl_image_cropper imageCrop()', TL_FILES);
 			}
 
+			// redirect back to the contao files manager
+
 			if (version_compare(VERSION, '3.5', '>')) {
-				// funktioniert unter 4.4
+				// works with contao 4
 				$this->redirect('contao?do=files');
 			} else {
-				// funktioniert unter 3.5
+				// works with contao 3.5
 				$this->redirect($this->Environment->script.'?do=files');
 			}
 			
 		}
+
+
+
+
+
 
 		// Setup the form
 
@@ -153,42 +206,38 @@ class ImageCrop extends Backend
 		$arrSettingSizes = $GLOBALS['TL_CONFIG']['useImagecropSizes'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true) : array();
 		$arrSettingARs = $GLOBALS['TL_CONFIG']['useImagecropARs'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true) : array();
 
-		if (TL_MODE == 'BE')
-		{
-			$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/georgpreisslimagecrop/js/cropper.min.js'; 
-			$GLOBALS['TL_CSS'][] = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'; 
-			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/bootstrap.css|static'; 
-			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper.min.css|static'; 
-			$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper-custom.css|static'; 
 
-			$this->Template = new BackendTemplate('be_imagecrop');
-			$this->Template->back = $this->Environment->base . preg_replace('/&(amp;)?(id|key|submit|imagecrop|token)=[^&]*/', '', $this->Environment->request);
-			$this->Template->imageSrc = $dc->id;
-			$this->Template->inputDo = $this->Input->get('do');
-			$this->Template->inputKey = $this->Input->get('key');
-			$this->Template->inputId = $this->Input->get('id');
-			$this->Template->token = $strToken;
-			$this->Template->messages = $this->getMessages();
-			$this->Template->settingARs = $arrSettingARs;
-			$this->Template->settingSizes = $arrSettingSizes;
+		$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/georgpreisslimagecrop/js/cropper.min.js'; 
+		$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/font-awesome.min.css|static'; 
+		$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/bootstrap.css|static'; 
+		$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper.min.css|static'; 
+		$GLOBALS['TL_CSS'][] = 'bundles/georgpreisslimagecrop/css/cropper-custom.css|static'; 
 
+		$this->Template = new BackendTemplate('be_imagecrop');
+		$this->Template->back = $this->Environment->base . preg_replace('/&(amp;)?(id|key|submit|imagecrop|token)=[^&]*/', '', $this->Environment->request);
+		$this->Template->imageSrc = $dc->id;
+		$this->Template->inputDo = $this->Input->get('do');
+		$this->Template->inputKey = $this->Input->get('key');
+		$this->Template->inputId = $this->Input->get('id');
+		$this->Template->token = $strToken;
+		$this->Template->messages = $this->getMessages();
+		$this->Template->settingARs = $arrSettingARs;
+		$this->Template->settingSizes = $arrSettingSizes;
 
-
-			if (version_compare(VERSION, '3.5', '>')) {
-				// funktioniert unter 4.4
-				$this->Template->formAction = "contao?";
-			} else {
-				// funktioniert unter 3.5
-				$this->Template->formAction = ampersand($this->Environment->script, ENCODE_AMPERSANDS);
-			}
-
-
-			$strHtml .= $this->Template->parse();
+		if (version_compare(VERSION, '3.5', '>')) {
+			// funktioniert unter 4.4
+			$this->Template->formAction = "contao?";
+		} else {
+			// funktioniert unter 3.5
+			$this->Template->formAction = ampersand($this->Environment->script, ENCODE_AMPERSANDS);
 		}
 
-		return $strHtml;
+		return $this->Template->parse();
 
 	}
+
+
+
 	
 }
 

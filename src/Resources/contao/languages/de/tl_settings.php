@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropAspectRatios'] = array('S
 
 $GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropArWidth'] = array('Breite');
 $GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropArHeight'] = array('Höhe');
-$GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropArHint'] = array('Tooltip-Info');
+$GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropArHint'] = array('Label');
 
 
 $GLOBALS['TL_LANG']['tl_settings_imagecrop']['useImagecropSizes'] = array('Vordefinierte Bildgrößen verwenden', 'Hier können Sie die Anzeige vordefinierter Bildgrößen aktivieren.');

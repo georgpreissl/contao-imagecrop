@@ -1,15 +1,46 @@
 <div class="imagecrop_ui_section ">
 	<h3><?= $GLOBALS['TL_LANG']['MSC']['imagecropAspectRatio'] ?></h3>
 		
-		<div class="btn-group docs-aspect-ratios" data-toggle="buttons">
+		<!-- <div class="btn-group docs-aspect-ratios" data-toggle="buttons"> -->
 
+			<label class="btn btn-primary btn-sm">
+            <input type="radio" class="sr-only" name="aspectRatio" value="1.7777777777777777">
+            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="aspectRatio: 16 / 9">
+              16:9
+            </span>
+          </label>
+
+
+			<label class="btn btn-primary btn-sm">
+            	<input type="radio" class="sr-only" name="aspectRatio" value="1.3333333333333333">
+            	<span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="aspectRatio: 4 / 3">
+              4:3
+            </span>
+          </label>
+
+
+			<label class="btn btn-primary btn-sm">
+            	<input type="radio" class="sr-only" name="aspectRatio" value="1">
+            	<span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="aspectRatio: 1 / 1">
+              1:1
+            	</span>
+          	</label>
+			<label class="btn btn-primary btn-sm">
+            	<input type="radio" class="sr-only" id="aspectRatio5" name="aspectRatio" value="NaN">
+				<span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="aspectRatio: NaN">
+              Free
+				</span>
+			</label>
+		<!-- </div> -->
+		<br>
+		<!-- <div class="btn-group docs-aspect-ratios" data-toggle="buttons"> -->
 			
 			<?php foreach ($this->settingARs as $arrAR) { ?>
 				<?php
 					$intValue =  $arrAR['imagecropArWidth'] / $arrAR['imagecropArHeight'];
 					// var_dump($intValue);
-					$strLabel = $arrAR['imagecropArWidth'] .' / '. $arrAR['imagecropArHeight'];
-					$strTooltip = ($arrAR['imagecropArHint'] != '' ? $arrAR['imagecropArHint'] : $strLabel);
+					$strTooltip = $arrAR['imagecropArWidth'] .':'. $arrAR['imagecropArHeight'];
+					$strLabel = ($arrAR['imagecropArHint'] != '' ? $arrAR['imagecropArHint'] : $strTooltip);
 				 ?>
 				<label class="btn btn-primary btn-sm">
 					<input type="radio" class="sr-only" name="aspectRatio" value="<?= $intValue ?>"  >
@@ -20,7 +51,9 @@
 			<?php } ?>
 
 
-		</div>
+
+
+		<!-- </div> -->
 	
 </div>
 

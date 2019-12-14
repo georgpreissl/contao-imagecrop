@@ -66,5 +66,6 @@ $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveRight'] = 'Move the image 10px to t
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveDown'] = 'Move the image 10px down';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveUp'] = 'Move the image 10px up';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolReset'] = 'Reset';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolClear'] = 'Clear';
 
 ?>

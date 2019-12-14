@@ -1,9 +1,6 @@
-.img-container > img {
-	max-width: 100%;
-	
-}
+
 .tl_formbody_edit {
-	padding: 15px;
+	padding: 0px 15px 0px 15px;
 }
 h2.sub_headline {
 	margin-left: 15px;
@@ -15,6 +12,11 @@ h2.sub_headline {
 }
 .img-container {
 	margin-bottom: 1rem;
+	
+}
+.img-container > img {
+	max-width: 100%;
+	display: block;
 	
 }
 .input-group-sm {
@@ -87,4 +89,22 @@ h2.sub_headline {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	
+}
+.input-group_scalex,
+.input-group_scaley {
+	visibility: hidden;
+	display: none;
+}
+.btn-primary {
+	color: #333 !important;
+	background-color: #f3f3f5 !important;
+	border: 1px solid #aaa !important;
+
+}
+.tip-top {
+	top: -7px !important;
+
+}
+.tl_tbox {
+	padding: 0px;
 }

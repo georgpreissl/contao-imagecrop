@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['imagecropAspectRatios'] = array
 (
 	'label'			=> &$GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropAspectRatios'],
 	'exclude' 		=> true,
-	'inputType' 		=> 'multiColumnWizard',
+	'inputType' 	=> 'multiColumnWizard',
 	'eval' 			=> array
 	(
 		'columnFields' => array
@@ -101,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['imagecropSizes'] = array
 (
 	'label'			=> &$GLOBALS['TL_LANG']['tl_settings_imagecrop']['imagecropSizes'],
 	'exclude' 		=> true,
-	'inputType' 		=> 'multiColumnWizard',
+	'inputType' 	=> 'multiColumnWizard',
 	'eval' 			=> array
 	(
 		'columnFields' => array

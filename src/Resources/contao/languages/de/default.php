@@ -66,5 +66,10 @@ $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveRight'] = 'Bild 10px nach rechts be
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveDown'] = 'Bild 10px nach unten bewegen';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveUp'] = 'Bild 10px nach oben bewegen';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolReset'] = 'Änderungen zurücksetzen';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolClear'] = 'Beschnittrahmen deaktivieren';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolRotateLeft'] = '45 Grad nach links rotieren';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolRotateRight'] = '45 Grad nach rechts rotieren';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolFlipHorizontal'] = 'Bild horizontal spiegeln';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolFlipVertical'] = 'Bild vertikal spiegeln';
 
 ?>

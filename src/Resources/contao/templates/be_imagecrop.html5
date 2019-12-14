@@ -4,7 +4,13 @@
 </div>
 
 <div class="imagecrop_wrap">
-	<h2 class="sub_headline"><?= $GLOBALS['TL_LANG']['MSC']['imagecropHeadline'] ?></h2>
+	<div class="tl_tbox block">
+		<h1 class="sub_headline" id="main_headline">
+			<?php echo $GLOBALS['TL_LANG']['MSC']['imagecropHeadline'] ?>
+				
+		</h1>
+		<?php //echo $GLOBALS['TL_LANG']['MSC']['imagecropIntroduction'] ?>
+	</div>
 	<?= $this->messages ?>
 
 	<form id="cropForm" action="<?= $this->formAction ?>" id="tl_unzip" class="tl_form" method="get" onsubmit="submitCrop()">
@@ -13,14 +19,7 @@
 			<input type="hidden" name="key" value="<?= $this->inputKey ?>" />
 			<input type="hidden" name="id" value="<?= $this->inputId ?>" />
 			<input type="hidden" name="token" value="<?= $this->token ?>" />
-			<input type="hidden" name="new_locx" id="new_locx" value="" />
-			<input type="hidden" name="new_locy" id="new_locy" value="" />
-			<input type="hidden" name="new_locw" id="new_locw" value="" />
-			<input type="hidden" name="new_loch" id="new_loch" value="" />
 
-			<div class="tl_tbox block">
-				<?= $GLOBALS['TL_LANG']['MSC']['imagecropIntroduction'] ?>
-			</div>
 
 			<div class="row">
 				<div class="col-md-9">
@@ -35,6 +34,9 @@
 					<div class="docs-toggles">
 						<?php count($this->settingARs) ? include('ui_aspect-ratios.html') : ''; ?>
 						<?php count($this->settingSizes) ? include('ui_sizes.html') : ''; ?>
+
+
+
 					</div>
 					<p class="imagegrop_credits"><?= $GLOBALS['TL_LANG']['MSC']['imagecropCredits'] ?></p>
 				</div>
@@ -63,19 +65,22 @@ window.onload = function () {
 	var image = container.getElementsByTagName('img').item(0);
 	var download = document.getElementById('download');
 	var actions = document.getElementById('actions');
-	var dataX = document.getElementById('dataX');
-	var dataY = document.getElementById('dataY');
-	var dataHeight = document.getElementById('dataHeight');
-	var dataWidth = document.getElementById('dataWidth');
-	var dataRotate = document.getElementById('dataRotate');
-	var dataScaleX = document.getElementById('dataScaleX');
-	var dataScaleY = document.getElementById('dataScaleY');
+
+	// get the form fields
+	var elDataX = document.getElementById('dataX');
+	var elDataY = document.getElementById('dataY');
+	var elDataHeight = document.getElementById('dataHeight');
+	var elDataWidth = document.getElementById('dataWidth');
+	var elDataRotate = document.getElementById('dataRotate');
+	var elDataScaleX = document.getElementById('dataScaleX');
+	var elDataScaleY = document.getElementById('dataScaleY');
 
 	var options = {
-		viewMode: 0,
+		viewMode: 1,
 		dragMode: 'crop',
 		preview: '.img-preview',
 		modal: true,
+		zoomOnWheel: false,
 		ready: function (e) {
 			// console.log(e.type);
 		},
@@ -91,14 +96,14 @@ window.onload = function () {
 		crop: function (e) {
 			var data = e.detail;
 
-			// console.log(e.type);
-			dataX.value = Math.round(data.x);
-			dataY.value = Math.round(data.y);
-			dataHeight.value = Math.round(data.height);
-			dataWidth.value = Math.round(data.width);
-			// dataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
-			// dataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
-			// dataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
+			// fill the form fields with the choosen values before the cropping starts
+			elDataX.value = Math.round(data.x);
+			elDataY.value = Math.round(data.y);
+			elDataHeight.value = Math.round(data.height);
+			elDataWidth.value = Math.round(data.width);
+			elDataRotate.value = typeof data.rotate !== 'undefined' ? data.rotate : '';
+			elDataScaleX.value = typeof data.scaleX !== 'undefined' ? data.scaleX : '';
+			elDataScaleY.value = typeof data.scaleY !== 'undefined' ? data.scaleY : '';
 		},
 		zoom: function (e) {
 			// console.log(e.type, e.detail.ratio);
@@ -116,6 +121,7 @@ window.onload = function () {
 	}
 
 	if (typeof document.createElement('cropper').style.transition === 'undefined') {
+		// console.log(999);
 		$('button[data-method="rotate"]').prop('disabled', true);
 		$('button[data-method="scale"]').prop('disabled', true);
 	}
