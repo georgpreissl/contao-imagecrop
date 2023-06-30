@@ -203,8 +203,17 @@ class ImageCrop extends Backend
 		$this->Session->set('tl_imagecrop', $strToken);
 
 		// get the predefined ratios and sizes
-		$arrSettingSizes = $GLOBALS['TL_CONFIG']['useImagecropSizes'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true) : array();
-		$arrSettingARs = $GLOBALS['TL_CONFIG']['useImagecropARs'] ? deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true) : array();
+
+		$arrSettingSizes = array();
+		if(isset($GLOBALS['TL_CONFIG']['useImagecropSizes'])){
+			$arrSettingSizes = deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true);
+		}
+
+		$arrSettingARs = array();
+		if(isset($GLOBALS['TL_CONFIG']['useImagecropARs'])){
+			$arrSettingARs = deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true);
+		} 
+		
 
 
 		$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/georgpreisslimagecrop/js/cropper.min.js'; 
@@ -242,4 +251,4 @@ class ImageCrop extends Backend
 }
 
 
-?>
+

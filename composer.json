@@ -18,7 +18,7 @@
         "source":"https://github.com/georgpreissl/imagecrop"
     },
     "require": {
-        "php": ">=5.5",
+        "php": "^7.2 || ^8.0",
         "contao/core-bundle": "^4",
         "menatwork/contao-multicolumnwizard": "^3.3"
     },
