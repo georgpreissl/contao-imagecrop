@@ -46,7 +46,7 @@ class tl_imagecrop extends tl_files
 
 		if (!$this->User->isAdmin && !in_array('f5', $this->User->fop))
 		{
-			return '';
+			//return ''; enable for all backend users
 		}
 
 		$strDecoded = urldecode($row['id']);
