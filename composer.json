@@ -19,19 +19,19 @@
     },
     "require": {
         "php": "^7.2 || ^8.0",
-        "contao/core-bundle": "^4",
-        "menatwork/contao-multicolumnwizard": "^3.3"
+        "contao/core-bundle": "^4 || ^5",
+        "menatwork/contao-multicolumnwizard": "^3.6"
     },
 	"require-dev": {
-		"contao/manager-plugin": "^2.0"
+        "contao/manager-plugin": "^2.7"
 	},
 	"conflict": {
 		"contao/manager-plugin": "<2.0 || >=3.0"
 	},
 	"autoload": {
 		"psr-4": {
-			"GeorgPreissl\\IC\\": "src/"
-		},	
+			"GeorgPreissl\\ImageCrop\\": "src/"
+		},      
         "classmap": [
             "src/Resources/contao/"
         ],
@@ -43,6 +43,6 @@
         ]
 	},
 	"extra": {
-		"contao-manager-plugin": "GeorgPreissl\\IC\\ContaoManager\\Plugin"
+		"contao-manager-plugin": "GeorgPreissl\\ImageCrop\\ContaoManager\\Plugin"
 	}
 }

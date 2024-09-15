@@ -1,24 +1,14 @@
 <?php
-/**
- * @copyright  Darko Selesi 2017 <http://w3scouts.com>
- * @author     Darko Selesi (w3scout)
- * @package    dompdf
- * @license    LGPL-3.0+
- * @see	       https://github.com/w3scout/contao-dompdf-bundle
- *
- */
 
-namespace GeorgPreissl\IC\ContaoManager;
+namespace GeorgPreissl\ImageCrop\ContaoManager;
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
+use GeorgPreissl\ImageCrop\GeorgPreisslImageCrop;
 
-/**
- * Plugin for the Contao Manager.
- *
- * @author Georg Preissl  <https://github.com/georgpreissl>
- */
+
 class Plugin implements BundlePluginInterface
 {
     /**
@@ -27,8 +17,8 @@ class Plugin implements BundlePluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create('GeorgPreissl\IC\GeorgPreisslImageCrop')
-                ->setLoadAfter(['Contao\CoreBundle\ContaoCoreBundle']),
+            BundleConfig::create(GeorgPreisslImageCrop::class)
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 }

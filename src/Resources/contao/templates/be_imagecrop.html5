@@ -1,6 +1,7 @@
 
+
 <div id="tl_buttons">
-	<a href="<?= $this->back ?>" class="header_back" title="<?= specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>"><?= $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a>
+	<a href="<?= $this->back ?>" class="header_back" title="<?= Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['backBT']) ?>"><?= $GLOBALS['TL_LANG']['MSC']['backBT'] ?></a>
 </div>
 
 <div class="imagecrop_wrap">
@@ -13,8 +14,9 @@
 	</div>
 	<?= $this->messages ?>
 
-	<form id="cropForm" action="<?= $this->formAction ?>" id="tl_unzip" class="tl_form" method="get" onsubmit="submitCrop()">
+	<form id="cropForm" action="<?= $this->formAction ?>" id="tl_unzip" class="tl_form" method="get"  >
 		<div class="tl_formbody_edit" id="tl_image_cropper">
+			<input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
 			<input type="hidden" name="do" value="<?= $this->inputDo ?>" />
 			<input type="hidden" name="key" value="<?= $this->inputKey ?>" />
 			<input type="hidden" name="id" value="<?= $this->inputId ?>" />
@@ -45,8 +47,8 @@
 
 		<div class="tl_formbody_submit">
 			<div class="tl_submit_container">
-				<input type="submit" id="UpdateImage" name="UpdateImage" class="tl_submit" alt="<?= specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']).'" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']) ?>" /> 
-				<input type="submit" id="submit" name="submit" class="tl_submit" alt="<?= specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']).'" accesskey="a" value="'.specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']) ?>" /> 
+				<input type="submit" id="UpdateImage" name="UpdateImage" class="tl_submit" alt="<?= Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']).'" accesskey="s" value="'.Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['imagecropUpdateImage']) ?>" /> 
+				<input type="submit" id="submit" name="DuplicateImage" class="tl_submit" alt="<?= Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']).'" accesskey="a" value="'.Contao\StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['imagecropSaveCopy']) ?>" /> 
 			</div>
 		</div>
 
@@ -331,16 +333,16 @@ window.onload = function () {
 
 
 
-	document.getElementById("cropForm").onsubmit = function() {
-		var objCropData = cropper.getData(true);
-		//console.log(objCropData);
-		document.getElementById('new_locx').value = objCropData.x;	
-		document.getElementById('new_locy').value = objCropData.y;	
-		document.getElementById('new_locw').value = objCropData.width;	
-		document.getElementById('new_loch').value = objCropData.height;	
+	// document.getElementById("cropForm").onsubmit = function() {
+	// 	var objCropData = cropper.getData(true);
+	// 	console.log(objCropData);
+	// 	document.getElementById('new_locx').value = objCropData.x;	
+	// 	document.getElementById('new_locy').value = objCropData.y;	
+	// 	document.getElementById('new_locw').value = objCropData.width;	
+	// 	document.getElementById('new_loch').value = objCropData.height;	
 
-		return true; 
-	};
+	// 	return true; 
+	// };
 
 
 
