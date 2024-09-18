@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.2 || ^8.0",
         "contao/core-bundle": "^4 || ^5",
-        "menatwork/contao-multicolumnwizard": "^3.6"
+        "menatwork/contao-multicolumnwizard-bundle": "^3.6"
     },
 	"require-dev": {
         "contao/manager-plugin": "^2.7"
