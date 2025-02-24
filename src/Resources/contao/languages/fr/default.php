@@ -1,25 +1,5 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php 
 
-/**
- * TYPOlight webCMS
- *
- * The TYPOlight webCMS is an accessible web content management system that 
- * specializes in accessibility and generates W3C-compliant HTML code. It 
- * provides a wide range of functionality to develop professional websites 
- * including a built-in search engine, form generator, file and user manager, 
- * CSS engine, multi-language support and many more. For more information and 
- * additional TYPOlight applications like the TYPOlight MVC Framework please 
- * visit the project website http://www.typolight.org.
- *
- * 
- *
- * @author     Georg Preissl <http://www.georg-preissl.at> 
- * @package    imagecrop
- * @author	   Cropper.js by Fengyuan Chen <http://chenfengyuan.com>       
- * @author	   based on the extension Moo_imagecropper by Lightive (erwan.ripoll)       
- * @license    GPL 
- * 
- */
 
 
 /**
@@ -66,5 +46,10 @@ $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveRight'] = 'Déplacez l\'image de 10
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveDown'] = 'Déplacez l\'image de 10px vers le bas';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolMoveUp'] = 'Déplacez l\'image de 10px vers le haut';
 $GLOBALS['TL_LANG']['MSC']['imagecropToolReset'] = 'Réinitialiser';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolClear'] = 'Beschnittrahmen deaktivieren';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolRotateLeft'] = 'Faire pivoter de 45 degrés vers la gauche';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolRotateRight'] = 'Faire pivoter de 45 degrés vers la droite';
+$GLOBALS['TL_LANG']['MSC']['imagecropToolFlipHorizontal'] = "Retourner l'image horizontalement";
+$GLOBALS['TL_LANG']['MSC']['imagecropToolFlipVertical'] = "Retourner l'image verticalement";
 
-?>
+
