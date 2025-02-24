@@ -11,6 +11,7 @@ use Contao\FilesModel;
 use Contao\Image;
 use Contao\Input;
 use Contao\System;
+use Contao\StringUtil;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\LogLevel;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -231,12 +232,12 @@ class Cropper extends Backend
 
 		$arrSettingSizes = array();
 		if(isset($GLOBALS['TL_CONFIG']['useImagecropSizes'])){
-			$arrSettingSizes = deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true);
+			$arrSettingSizes = StringUtil::deserialize($GLOBALS['TL_CONFIG']['imagecropSizes'],true);
 		}
 
 		$arrSettingARs = array();
 		if(isset($GLOBALS['TL_CONFIG']['useImagecropARs'])){
-			$arrSettingARs = deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true);
+			$arrSettingARs = StringUtil::deserialize($GLOBALS['TL_CONFIG']['imagecropAspectRatios'],true);
 		} 
 		
 
